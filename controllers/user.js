@@ -29,7 +29,7 @@ exports.updateUser = (req, res) => {
     { new: true, useFindAndModify: false },
     (err, user) => {
       if (err) {
-        return res.json({
+        return res.status(400).json({
           error: 'you are not authorized to update',
         });
       }
@@ -68,10 +68,8 @@ exports.pushOrderInPurchaseList = (req, res, next) => {
       transaction_id: req.body.order.transaction_id,
     });
   });
-
   //store this in db
-
-  User.findByIdAndUpdate(
+  User.findOneAndUpdate(
     { _id: req.profile._id },
     { $push: { purchases: purchases } },
     { new: true },
